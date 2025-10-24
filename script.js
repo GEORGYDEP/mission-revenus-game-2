@@ -3,6 +3,8 @@
 // =================================
 let studentEmail = '';
 let studentName = '';
+
+// Scores cumulés (affichage)
 let scores = {
     mission1: 0,
     mission2: 0,
@@ -10,7 +12,15 @@ let scores = {
     mission4: 0
 };
 
-// Limites par mission (toutes à 25)
+// Banque des points réellement remportés par question (évite tout double comptage)
+const earnedPoints = {
+    mission1: {}, // ex: {1:5, 2:5, ...}
+    mission2: {},
+    mission3: {},
+    mission4: {}
+};
+
+// Limites par mission
 const MISSION_MAX = {
     mission1: 25,
     mission2: 25,
@@ -19,9 +29,11 @@ const MISSION_MAX = {
 };
 
 // Barème spécifique Mission 4 (9 questions = 25 points)
-const M4_POINTS = [3,3,3,3,3,3,3,3,1];
+const M4_POINTS = [3,3,3,3,3,3,3,3,1]; // Q1..Q9
 
-// Réponses correctes
+// =================================
+// RÉPONSES CORRECTES
+// =================================
 const correctAnswers = {
     mission1: {
         q1: 'b', // Cohabitation
@@ -75,7 +87,6 @@ function login() {
     const email = document.getElementById('student-email').value.trim();
     const errorDiv = document.getElementById('email-error');
 
-    // Validation
     if (!email) {
         errorDiv.textContent = '⚠️ Veuillez entrer votre adresse email';
         return;
@@ -85,7 +96,6 @@ function login() {
         return;
     }
 
-    // Extraction du nom
     const nameParts = email.split('@')[0].split('.');
     if (nameParts.length < 2) {
         errorDiv.textContent = '⚠️ Format incorrect. Utilisez prenom.nom@istlm.org';
@@ -100,7 +110,6 @@ function login() {
     showScreen('menu-screen');
     document.getElementById('student-name').textContent = '👤 ' + studentName;
 
-    // Débloquer M1
     unlockMission(1);
 }
 
@@ -137,10 +146,11 @@ function startMission(missionNumber) {
 function resetMission(missionNumber) {
     const missionKey = `mission${missionNumber}`;
 
-    // Réinitialiser l'état logique (crucial)
+    // 1) Reset logique
     scores[missionKey] = 0;
+    earnedPoints[missionKey] = {}; // vide la banque de points par question
 
-    // Réinitialiser les cartes/questions
+    // 2) Reset UI des questions
     const qCards = document.querySelectorAll(`#mission-${missionNumber} .question-card`);
     qCards.forEach((q, idx) => {
         q.classList.toggle('active', idx === 0);
@@ -154,21 +164,20 @@ function resetMission(missionNumber) {
         q.querySelectorAll('.feedback').forEach(fb => fb.classList.remove('show'));
     });
 
-    // Cacher le résultat de mission
+    // 3) Cacher le résultat
     const res = document.getElementById(`result-m${missionNumber}`);
     if (res) res.classList.remove('show');
 
-    // Score affiché = 0
+    // 4) Score affiché = 0
     const scoreEl = document.getElementById(`score-m${missionNumber}`);
     if (scoreEl) scoreEl.textContent = '0';
 
-    // Puzzle zone (si mission 3)
+    // 5) Puzzle reset (mission 3)
     if (missionNumber === 3) {
         const puzzleAnswer = document.getElementById('puzzle-answer');
         if (puzzleAnswer) {
             puzzleAnswer.innerHTML = '<p class="puzzle-instruction">👆 Glisse les mots ici dans le bon ordre</p>';
         }
-        // Réactiver bouton check si présent
         const checkBtn = document.querySelector('#mission-3 .btn-check');
         if (checkBtn) checkBtn.disabled = false;
     }
@@ -177,6 +186,24 @@ function resetMission(missionNumber) {
 function backToMenu() {
     showScreen('menu-screen');
     updateTotalScore();
+}
+
+// =================================
+// OUTIL DE CALCUL DE POINTS
+// =================================
+function getPointsForQuestion(missionNumber, questionNumber) {
+    if (missionNumber === 4) {
+        // Index 0..8
+        return M4_POINTS[questionNumber - 1] || 0;
+    }
+    // Par défaut: 5 points/question pour autres missions (si applicable)
+    return 5;
+}
+
+function recomputeMissionScore(missionKey) {
+    // Somme des points réellement gagnés par question, puis plafonner
+    const total = Object.values(earnedPoints[missionKey]).reduce((a, b) => a + b, 0);
+    scores[missionKey] = Math.min(MISSION_MAX[missionKey], total);
 }
 
 // =================================
@@ -197,10 +224,9 @@ function checkAnswer(missionNumber, questionNumber, selectedAnswer) {
     const buttons = questionCard.querySelectorAll('.option-btn');
     buttons.forEach(btn => btn.disabled = true);
 
-    // Comparaison
     const isCorrect = selectedAnswer === correctAnswer;
 
-    // Styliser boutons
+    // Styliser boutons (vert la bonne, rouge la mauvaise choisie)
     buttons.forEach(btn => {
         const onclickVal = btn.getAttribute('onclick') || '';
         const match = onclickVal.match(/'([a-c])'/);
@@ -213,19 +239,15 @@ function checkAnswer(missionNumber, questionNumber, selectedAnswer) {
         }
     });
 
-    // Mise à jour score si correct
     if (isCorrect) {
-        let pointsToAdd = 5; // défaut
+        // Attribuer une fois les points de cette question
+        const points = getPointsForQuestion(missionNumber, questionNumber);
+        earnedPoints[missionKey][questionNumber] = points;
 
-        if (missionNumber === 4) {
-            // Barème mission 4
-            pointsToAdd = M4_POINTS[questionNumber - 1] || 0;
-        }
+        // Recalculer le score mission et plafonner à 25
+        recomputeMissionScore(missionKey);
 
-        // Plafond à 25 pour la mission
-        const capped = Math.min(MISSION_MAX[missionKey], scores[missionKey] + pointsToAdd);
-        scores[missionKey] = capped;
-
+        // UI score
         const sc = document.getElementById(`score-m${missionNumber}`);
         if (sc) sc.textContent = String(scores[missionKey]);
 
@@ -240,7 +262,7 @@ function checkAnswer(missionNumber, questionNumber, selectedAnswer) {
             `<button onclick="nextQuestion(${missionNumber}, ${questionNumber})" class="btn-next">Question suivante ➡️</button>`;
     }
 
-    // Verrouiller la question (traitée une fois)
+    // Question traitée (peu importe juste/faux)
     questionCard.dataset.answered = 'true';
 }
 
@@ -261,39 +283,35 @@ function showMissionResult(missionNumber) {
     const scoreSpan = document.getElementById(`final-score-m${missionNumber}`);
     const messageP = document.getElementById(`message-m${missionNumber}`);
 
-    const score = scores[`mission${missionNumber}`];
+    const missionKey = `mission${missionNumber}`;
+    // Sécurité: recompute avant affichage (au cas où)
+    recomputeMissionScore(missionKey);
+
+    const score = scores[missionKey];
     if (scoreSpan) scoreSpan.textContent = String(score);
 
     let message = '';
-    if (score >= 20) {
-        message = '🌟 Excellent ! Tu maîtrises parfaitement cette notion !';
-    } else if (score >= 15) {
-        message = '👍 Très bien ! Tu as bien compris l\'essentiel.';
-    } else if (score >= 10) {
-        message = '💪 Pas mal, mais tu peux encore progresser.';
-    } else {
-        message = '📚 Continue à étudier, tu vas y arriver !';
-    }
+    if (score >= 20) message = '🌟 Excellent ! Tu maîtrises parfaitement cette notion !';
+    else if (score >= 15) message = '👍 Très bien ! Tu as bien compris l\'essentiel.';
+    else if (score >= 10) message = '💪 Pas mal, mais tu peux encore progresser.';
+    else message = '📚 Continue à étudier, tu vas y arriver !';
 
     if (messageP) messageP.textContent = message;
     if (resultDiv) resultDiv.classList.add('show');
 
-    // Badge sur la carte
     const status = document.getElementById(`status-${missionNumber}`);
     if (status) status.innerHTML = `<span class="status-badge completed">✅ ${score}/25</span>`;
 
-    // Débloquer mission suivante
     if (missionNumber < 4) {
         unlockMission(missionNumber + 1);
     } else {
-        // Toutes les missions terminées
         const btn = document.getElementById('results-btn');
         if (btn) btn.style.display = 'block';
     }
 }
 
 // =================================
-// PUZZLE (Mission 3, Question 1)
+// PUZZLE (Mission 3, Q1)
 // =================================
 let draggedElement = null;
 
@@ -309,7 +327,6 @@ function initPuzzle() {
     puzzleWords.forEach(word => {
         word.addEventListener('dragstart', handleDragStart);
         word.addEventListener('dragend', handleDragEnd);
-        // support tactile
         word.addEventListener('click', handleWordClick);
     });
 
@@ -402,19 +419,18 @@ function checkPuzzle(missionNumber, questionNumber) {
     if (checkBtn) checkBtn.disabled = true;
 
     if (isCorrect) {
+        // +5 points pour M3 Q1
+        earnedPoints[missionKey][questionNumber] = 5;
+        recomputeMissionScore(missionKey);
+
+        const sc = document.getElementById(`score-m${missionNumber}`);
+        if (sc) sc.textContent = String(scores[missionKey]);
+
         feedbackDiv.className = 'feedback correct show';
         feedbackDiv.innerHTML =
             '✅ <strong>Parfait !</strong> Tu as reconstitué correctement la définition de "salarié" !<br>' +
             `<button onclick="nextQuestion(${missionNumber}, ${questionNumber})" class="btn-next">Question suivante ➡️</button>`;
 
-        // +5 points, plafonné à 25
-        const newScore = Math.min(MISSION_MAX[missionKey], scores[missionKey] + 5);
-        scores[missionKey] = newScore;
-
-        const sc = document.getElementById(`score-m${missionNumber}`);
-        if (sc) sc.textContent = String(scores[missionKey]);
-
-        // Verrouille la question
         questionCard.dataset.answered = 'true';
     } else {
         feedbackDiv.className = 'feedback incorrect show';
@@ -435,8 +451,11 @@ function updateTotalScore() {
 function showResults() {
     showScreen('results-screen');
 
+    // Sécurité: recompute toutes les missions
+    ['mission1','mission2','mission3','mission4'].forEach(k => recomputeMissionScore(k));
+
     const total = scores.mission1 + scores.mission2 + scores.mission3 + scores.mission4;
-    const percentage = total; // /100 * 100 => déjà en points sur 100
+    const percentage = total;
 
     const nameEl = document.getElementById('final-student-name');
     if (nameEl) nameEl.textContent = studentName;
@@ -493,6 +512,9 @@ function showResults() {
 // ENVOI DES RÉSULTATS
 // =================================
 function sendResults() {
+    // Sécurité: toujours recompute avant envoi
+    ['mission1','mission2','mission3','mission4'].forEach(k => recomputeMissionScore(k));
+
     const total = scores.mission1 + scores.mission2 + scores.mission3 + scores.mission4;
     const sendBtn = document.getElementById('send-btn');
 
