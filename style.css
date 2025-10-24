@@ -1,0 +1,874 @@
+/* =================================
+   VARIABLES & RESET
+   ================================= */
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #50C878;
+    --warning-color: #F39C12;
+    --danger-color: #E74C3C;
+    --dark: #2C3E50;
+    --light: #ECF0F1;
+    --success: #27AE60;
+    --text-dark: #34495E;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+}
+
+/* =================================
+   ÉCRANS (SCREENS)
+   ================================= */
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =================================
+   ÉCRAN DE CONNEXION
+   ================================= */
+.login-container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.money-icon {
+    font-size: 80px;
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.logo h1 {
+    color: var(--primary-color);
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: var(--text-dark);
+    font-size: 16px;
+}
+
+.login-form {
+    margin: 30px 0;
+}
+
+.login-form h2 {
+    color: var(--dark);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--light);
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-size: 14px;
+    margin-bottom: 15px;
+    min-height: 20px;
+}
+
+.course-info {
+    background: var(--light);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.course-info p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+/* =================================
+   BOUTONS
+   ================================= */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    padding: 12px 30px;
+    background: var(--light);
+    color: var(--dark);
+    border: 2px solid var(--dark);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: var(--dark);
+    color: white;
+}
+
+.btn-back {
+    padding: 10px 20px;
+    background: white;
+    color: var(--dark);
+    border: 2px solid var(--dark);
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    background: var(--dark);
+    color: white;
+}
+
+.btn-check {
+    width: 100%;
+    padding: 12px;
+    background: var(--warning-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+}
+
+.btn-check:hover {
+    background: #e67e22;
+    transform: scale(1.02);
+}
+
+.btn-next {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-next:hover {
+    background: #3a7bc8;
+    transform: scale(1.05);
+}
+
+.btn-results {
+    margin: 30px auto;
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.btn-results:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* =================================
+   MENU PRINCIPAL
+   ================================= */
+.header {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.student-info {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--dark);
+}
+
+.score-display {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.missions-container {
+    max-width: 1200px;
+    width: 100%;
+}
+
+.missions-container h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 42px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mission-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mission-card:hover:not(.locked) {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.mission-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mission-icon {
+    font-size: 60px;
+    min-width: 80px;
+    text-align: center;
+}
+
+.mission-content {
+    flex: 1;
+}
+
+.mission-content h3 {
+    color: var(--primary-color);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.mission-content h2 {
+    color: var(--dark);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.mission-content p {
+    color: var(--text-dark);
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.mission-points {
+    color: var(--success);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mission-status {
+    min-width: 150px;
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-badge.locked {
+    background: var(--light);
+    color: var(--text-dark);
+}
+
+.status-badge.completed {
+    background: var(--success);
+    color: white;
+}
+
+.status-badge.unlocked {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* =================================
+   ÉCRANS DE MISSION
+   ================================= */
+.mission-screen {
+    background: var(--light);
+}
+
+.mission-header {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mission-header h2 {
+    color: var(--dark);
+    font-size: 22px;
+}
+
+.mission-progress {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.mission-content-area {
+    width: 100%;
+    max-width: 900px;
+}
+
+.question-card {
+    display: none;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+.question-card.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.question-illustration {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.question-illustration > div {
+    font-size: 80px;
+    animation: bounce 2s infinite;
+}
+
+.question-card h3 {
+    color: var(--primary-color);
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.question-text {
+    font-size: 22px;
+    color: var(--dark);
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option-btn {
+    width: 100%;
+    padding: 20px;
+    background: var(--light);
+    border: 3px solid transparent;
+    border-radius: 15px;
+    font-size: 18px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.option-btn:hover {
+    background: #d5dbdb;
+    border-color: var(--primary-color);
+    transform: translateX(10px);
+}
+
+.option-btn.correct {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+}
+
+.option-btn.incorrect {
+    background: var(--danger-color);
+    color: white;
+    border-color: var(--danger-color);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.feedback {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    display: none;
+}
+
+.feedback.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feedback.correct {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+}
+
+.feedback.incorrect {
+    background: #f8d7da;
+    color: #721c24;
+    border: 2px solid #f5c6cb;
+}
+
+/* =================================
+   PUZZLE (Mission 3)
+   ================================= */
+.puzzle-container {
+    margin: 30px 0;
+}
+
+.puzzle-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+    background: var(--light);
+    border-radius: 10px;
+    min-height: 100px;
+    margin-bottom: 20px;
+}
+
+.puzzle-word {
+    display: inline-block;
+    padding: 12px 20px;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    cursor: move;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.puzzle-word:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.puzzle-word.dragging {
+    opacity: 0.5;
+}
+
+.puzzle-answer {
+    padding: 30px;
+    background: #fff3cd;
+    border: 3px dashed var(--warning-color);
+    border-radius: 15px;
+    min-height: 150px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.puzzle-instruction {
+    width: 100%;
+    text-align: center;
+    color: #856404;
+    font-style: italic;
+}
+
+/* =================================
+   RÉSULTATS DE MISSION
+   ================================= */
+.mission-result {
+    display: none;
+    background: white;
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease;
+}
+
+.mission-result.show {
+    display: block;
+}
+
+.result-icon {
+    font-size: 100px;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite;
+}
+
+.mission-result h2 {
+    color: var(--dark);
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.result-score {
+    font-size: 32px;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.result-message {
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+}
+
+/* =================================
+   RÉSULTATS FINAUX
+   ================================= */
+.results-container {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.results-container h1 {
+    color: var(--dark);
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+.student-name-display {
+    font-size: 24px;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.total-score-display {
+    margin: 40px 0;
+}
+
+.score-circle {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.score-circle span {
+    font-size: 60px;
+    color: white;
+    font-weight: bold;
+}
+
+.score-detail {
+    font-size: 24px;
+    color: var(--text-dark);
+}
+
+.performance-message {
+    font-size: 22px;
+    padding: 25px;
+    border-radius: 15px;
+    margin: 30px 0;
+    font-weight: 500;
+}
+
+.performance-message.excellent {
+    background: #d4edda;
+    color: #155724;
+}
+
+.performance-message.good {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.performance-message.average {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.performance-message.needs-improvement {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.missions-breakdown {
+    margin: 40px 0;
+    text-align: left;
+}
+
+.missions-breakdown h3 {
+    color: var(--dark);
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.mission-score-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: var(--light);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.mission-score-item .score {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.certificate-section {
+    margin: 40px 0;
+}
+
+.certificate {
+    border: 5px solid gold;
+    border-radius: 15px;
+    padding: 40px;
+    background: linear-gradient(135deg, #fff9e6 0%, #ffe6b3 100%);
+}
+
+.certificate h2 {
+    color: #d4af37;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.certificate h3 {
+    color: var(--dark);
+    font-size: 32px;
+    margin: 15px 0;
+}
+
+.cert-course {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 15px 0;
+}
+
+.cert-score {
+    font-size: 22px;
+    color: var(--success);
+    font-weight: bold;
+}
+
+.cert-date {
+    font-size: 14px;
+    color: var(--text-dark);
+    margin-top: 20px;
+}
+
+.results-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 30px 20px;
+    }
+
+    .mission-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mission-icon {
+        font-size: 50px;
+    }
+
+    .mission-content h2 {
+        font-size: 20px;
+    }
+
+    .mission-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .question-card {
+        padding: 25px;
+    }
+
+    .question-text {
+        font-size: 18px;
+    }
+
+    .option-btn {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    .results-container {
+        padding: 30px 20px;
+    }
+
+    .score-circle {
+        width: 150px;
+        height: 150px;
+    }
+
+    .score-circle span {
+        font-size: 45px;
+    }
+
+    .results-actions {
+        flex-direction: column;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
+}
+
+/* =================================
+   ANIMATIONS SUPPLÉMENTAIRES
+   ================================= */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}

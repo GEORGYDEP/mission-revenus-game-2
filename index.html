@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Revenus - Le Parcours Professionnel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Écran de connexion -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <div class="logo">
+                <div class="money-icon">💶</div>
+                <h1>MISSION REVENUS</h1>
+                <p class="subtitle">Le Parcours Professionnel</p>
+            </div>
+            
+            <div class="login-form">
+                <h2>Connexion Élève</h2>
+                <input type="email" id="student-email" placeholder="prenom.nom@istlm.org" required>
+                <div id="email-error" class="error-message"></div>
+                <button onclick="login()" class="btn-primary">Commencer la Mission</button>
+            </div>
+            
+            <div class="course-info">
+                <p>📚 Cours : Limites de la Consommation</p>
+                <p>🎯 Objectif : Maîtriser les revenus et les catégories de travailleurs</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran du menu principal -->
+    <div id="menu-screen" class="screen">
+        <div class="header">
+            <div class="student-info">
+                <span id="student-name">👤 Élève</span>
+            </div>
+            <div class="score-display">
+                <span>🏆 Score Total: <span id="total-score">0</span>/100</span>
+            </div>
+        </div>
+
+        <div class="missions-container">
+            <h1>Choisis ta Mission</h1>
+            
+            <div class="mission-card" id="mission-1-card" onclick="startMission(1)">
+                <div class="mission-icon">🏠</div>
+                <div class="mission-content">
+                    <h3>MISSION 1</h3>
+                    <h2>La notion de ménage</h2>
+                    <p>Découvre ce qu'est un ménage et ses caractéristiques</p>
+                    <div class="mission-points">25 points</div>
+                </div>
+                <div class="mission-status" id="status-1">
+                    <span class="status-badge locked">🔒 Commencer</span>
+                </div>
+            </div>
+
+            <div class="mission-card locked" id="mission-2-card" onclick="startMission(2)">
+                <div class="mission-icon">💰</div>
+                <div class="mission-content">
+                    <h3>MISSION 2</h3>
+                    <h2>Les origines des revenus</h2>
+                    <p>Comprends d'où viennent les revenus : travail et capital</p>
+                    <div class="mission-points">25 points</div>
+                </div>
+                <div class="mission-status" id="status-2">
+                    <span class="status-badge locked">🔒 Verrouillé</span>
+                </div>
+            </div>
+
+            <div class="mission-card locked" id="mission-3-card" onclick="startMission(3)">
+                <div class="mission-icon">👔</div>
+                <div class="mission-content">
+                    <h3>MISSION 3</h3>
+                    <h2>Les catégories de travailleurs</h2>
+                    <p>Différencie salarié, indépendant et fonctionnaire</p>
+                    <div class="mission-points">25 points</div>
+                </div>
+                <div class="mission-status" id="status-3">
+                    <span class="status-badge locked">🔒 Verrouillé</span>
+                </div>
+            </div>
+
+            <div class="mission-card locked" id="mission-4-card" onclick="startMission(4)">
+                <div class="mission-icon">💵</div>
+                <div class="mission-content">
+                    <h3>MISSION 4</h3>
+                    <h2>Les types de rémunération</h2>
+                    <p>Associe chaque métier à sa forme de rémunération</p>
+                    <div class="mission-points">25 points</div>
+                </div>
+                <div class="mission-status" id="status-4">
+                    <span class="status-badge locked">🔒 Verrouillé</span>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="showResults()" class="btn-results" id="results-btn" style="display: none;">
+            🎓 Voir mes Résultats Finaux
+        </button>
+    </div>
+
+    <!-- Écran Mission 1 : La notion de ménage -->
+    <div id="mission-1" class="screen mission-screen">
+        <div class="mission-header">
+            <button onclick="backToMenu()" class="btn-back">← Retour</button>
+            <h2>MISSION 1 : La notion de ménage</h2>
+            <div class="mission-progress">Score: <span id="score-m1">0</span>/25</div>
+        </div>
+
+        <div class="mission-content-area">
+            <!-- Question 1 -->
+            <div class="question-card active" id="m1-q1">
+                <div class="question-illustration">
+                    <div class="house-icon">🏠👨‍👩‍👧‍👦</div>
+                </div>
+                <h3>Question 1/5</h3>
+                <p class="question-text">Qu'est-ce qui définit un ménage ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(1, 1, 'a')">
+                        A) Uniquement les liens de parenté
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 1, 'b')">
+                        B) La cohabitation dans un même logement
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 1, 'c')">
+                        C) Le niveau de revenu similaire
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m1-q1"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" id="m1-q2">
+                <div class="question-illustration">
+                    <div class="family-icon">👨‍👩‍👧 ➕ 👴👵</div>
+                </div>
+                <h3>Question 2/5</h3>
+                <p class="question-text">Un ménage peut-il être composé de plusieurs familles ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(1, 2, 'a')">
+                        A) Oui, car c'est la cohabitation qui définit le ménage
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 2, 'b')">
+                        B) Non, un ménage = une famille
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 2, 'c')">
+                        C) Seulement si elles ont le même nom
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m1-q2"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card" id="m1-q3">
+                <div class="question-illustration">
+                    <div class="stat-icon">📊 🇧🇪</div>
+                </div>
+                <h3>Question 3/5</h3>
+                <p class="question-text">Combien de ménages privés compte la Belgique (environ) ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(1, 3, 'a')">
+                        A) 2 millions
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 3, 'b')">
+                        B) 4,2 millions
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 3, 'c')">
+                        C) 8 millions
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m1-q3"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" id="m1-q4">
+                <div class="question-illustration">
+                    <div class="person-icon">🧑</div>
+                </div>
+                <h3>Question 4/5</h3>
+                <p class="question-text">Un célibataire vivant seul constitue-t-il un ménage ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(1, 4, 'a')">
+                        A) Oui, un ménage peut être composé d'une seule personne
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 4, 'b')">
+                        B) Non, il faut au moins 2 personnes
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 4, 'c')">
+                        C) Seulement si c'est une personne âgée
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m1-q4"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" id="m1-q5">
+                <div class="question-illustration">
+                    <div class="average-icon">👨‍👩‍👧</div>
+                </div>
+                <h3>Question 5/5</h3>
+                <p class="question-text">Quelle est la taille moyenne d'un ménage privé en Belgique ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(1, 5, 'a')">
+                        A) 1,5 personne
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 5, 'b')">
+                        B) 2,38 personnes
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(1, 5, 'c')">
+                        C) 4 personnes
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m1-q5"></div>
+            </div>
+
+            <!-- Résultat Mission 1 -->
+            <div class="mission-result" id="result-m1">
+                <div class="result-icon">🎉</div>
+                <h2>Mission 1 Terminée !</h2>
+                <p class="result-score">Tu as obtenu <span id="final-score-m1">0</span>/25 points</p>
+                <p class="result-message" id="message-m1"></p>
+                <button onclick="backToMenu()" class="btn-primary">Continuer vers la Mission 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Mission 2 : Les origines des revenus -->
+    <div id="mission-2" class="screen mission-screen">
+        <div class="mission-header">
+            <button onclick="backToMenu()" class="btn-back">← Retour</button>
+            <h2>MISSION 2 : Les origines des revenus</h2>
+            <div class="mission-progress">Score: <span id="score-m2">0</span>/25</div>
+        </div>
+
+        <div class="mission-content-area">
+            <!-- Question 1 -->
+            <div class="question-card active" id="m2-q1">
+                <div class="question-illustration">
+                    <div class="work-icon">💼</div>
+                </div>
+                <h3>Question 1/5</h3>
+                <p class="question-text">Quels sont les deux facteurs de production générateurs de revenus ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(2, 1, 'a')">
+                        A) Le travail et le capital
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 1, 'b')">
+                        B) L'épargne et la consommation
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 1, 'c')">
+                        C) Le salaire et les impôts
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m2-q1"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" id="m2-q2">
+                <div class="question-illustration">
+                    <div class="salary-icon">💰➡️👷</div>
+                </div>
+                <h3>Question 2/5</h3>
+                <p class="question-text">Que reçoivent les ménages en échange du travail fourni ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(2, 2, 'a')">
+                        A) Des biens et services
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 2, 'b')">
+                        B) Une rémunération
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 2, 'c')">
+                        C) Un contrat
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m2-q2"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card" id="m2-q3">
+                <div class="question-illustration">
+                    <div class="saving-icon">🏦💵</div>
+                </div>
+                <h3>Question 3/5</h3>
+                <p class="question-text">Qu'est-ce que l'épargne ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(2, 3, 'a')">
+                        A) L'argent dépensé en biens de luxe
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 3, 'b')">
+                        B) La partie du revenu non dépensée immédiatement
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 3, 'c')">
+                        C) Les impôts payés à l'État
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m2-q3"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" id="m2-q4">
+                <div class="question-illustration">
+                    <div class="treasure-icon">💰🔒</div>
+                </div>
+                <h3>Question 4/5</h3>
+                <p class="question-text">Que signifie "thésauriser" ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(2, 4, 'a')">
+                        A) Investir son argent en bourse
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 4, 'b')">
+                        B) Mettre de l'argent de côté sans le faire fructifier
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 4, 'c')">
+                        C) Dépenser tout son salaire
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m2-q4"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" id="m2-q5">
+                <div class="question-illustration">
+                    <div class="interest-icon">🏦➡️💶</div>
+                </div>
+                <h3>Question 5/5</h3>
+                <p class="question-text">Que reçoivent les ménages en échange de l'argent placé en banque ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(2, 5, 'a')">
+                        A) Des intérêts
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 5, 'b')">
+                        B) Des dividendes uniquement
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(2, 5, 'c')">
+                        C) Rien du tout
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m2-q5"></div>
+            </div>
+
+            <!-- Résultat Mission 2 -->
+            <div class="mission-result" id="result-m2">
+                <div class="result-icon">🎉</div>
+                <h2>Mission 2 Terminée !</h2>
+                <p class="result-score">Tu as obtenu <span id="final-score-m2">0</span>/25 points</p>
+                <p class="result-message" id="message-m2"></p>
+                <button onclick="backToMenu()" class="btn-primary">Continuer vers la Mission 3</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Mission 3 : Les catégories de travailleurs -->
+    <div id="mission-3" class="screen mission-screen">
+        <div class="mission-header">
+            <button onclick="backToMenu()" class="btn-back">← Retour</button>
+            <h2>MISSION 3 : Les catégories de travailleurs</h2>
+            <div class="mission-progress">Score: <span id="score-m3">0</span>/25</div>
+        </div>
+
+        <div class="mission-content-area">
+            <!-- Question 1 : Puzzle définition salarié -->
+            <div class="question-card active" id="m3-q1">
+                <div class="question-illustration">
+                    <div class="worker-icon">👔📝</div>
+                </div>
+                <h3>Question 1/5 - Puzzle de définition</h3>
+                <p class="question-text">Reconstitue la définition de "salarié" en remettant les mots dans l'ordre :</p>
+                <div class="puzzle-container">
+                    <div class="puzzle-words" id="puzzle-source">
+                        <span class="puzzle-word" draggable="true" data-word="par un contrat de travail">par un contrat de travail</span>
+                        <span class="puzzle-word" draggable="true" data-word="le salarié">le salarié</span>
+                        <span class="puzzle-word" draggable="true" data-word="vis-à-vis duquel">vis-à-vis duquel</span>
+                        <span class="puzzle-word" draggable="true" data-word="d'un employeur">d'un employeur</span>
+                        <span class="puzzle-word" draggable="true" data-word="est celui qui perçoit">est celui qui perçoit</span>
+                        <span class="puzzle-word" draggable="true" data-word="il est lié">il est lié</span>
+                        <span class="puzzle-word" draggable="true" data-word="sa rémunération">sa rémunération</span>
+                    </div>
+                    <div class="puzzle-answer" id="puzzle-answer">
+                        <p class="puzzle-instruction">👆 Glisse les mots ici dans le bon ordre</p>
+                    </div>
+                </div>
+                <button onclick="checkPuzzle(3, 1)" class="btn-check">Vérifier ma réponse</button>
+                <div class="feedback" id="feedback-m3-q1"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" id="m3-q2">
+                <div class="question-illustration">
+                    <div class="independent-icon">🛠️💼</div>
+                </div>
+                <h3>Question 2/5</h3>
+                <p class="question-text">Quelle est la principale caractéristique d'un indépendant ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(3, 2, 'a')">
+                        A) Il a un contrat de travail avec son employeur
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 2, 'b')">
+                        B) Il ne dépend d'aucune autorité et exerce librement son activité
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 2, 'c')">
+                        C) Il travaille obligatoirement seul
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m3-q2"></div>
+            </div>
+
+            <!-- Question 3 : Classement des professions -->
+            <div class="question-card" id="m3-q3">
+                <div class="question-illustration">
+                    <div class="job-icon">👨‍⚕️👨‍🔧👨‍💼</div>
+                </div>
+                <h3>Question 3/5</h3>
+                <p class="question-text">Parmi ces professions, lesquelles sont des INDÉPENDANTS ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(3, 3, 'a')">
+                        A) Professeur, comptable, infirmier
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 3, 'b')">
+                        B) Médecin en cabinet privé, artisan plombier, photographe à son compte
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 3, 'c')">
+                        C) Militaire, fonctionnaire, policier
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m3-q3"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" id="m3-q4">
+                <div class="question-illustration">
+                    <div class="contract-icon">📄✍️</div>
+                </div>
+                <h3>Question 4/5</h3>
+                <p class="question-text">Quel document lie un salarié à son employeur ?</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(3, 4, 'a')">
+                        A) Une carte d'identité professionnelle
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 4, 'b')">
+                        B) Un contrat de travail
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 4, 'c')">
+                        C) Un certificat de scolarité
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m3-q4"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" id="m3-q5">
+                <div class="question-illustration">
+                    <div class="state-icon">🏛️👨‍💼</div>
+                </div>
+                <h3>Question 5/5</h3>
+                <p class="question-text">Un fonctionnaire travaille pour :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(3, 5, 'a')">
+                        A) Une entreprise privée
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 5, 'b')">
+                        B) L'agent État
+                    </button>
+                    <button class="option-btn" onclick="checkAnswer(3, 5, 'c')">
+                        C) Lui-même en tant qu'indépendant
+                    </button>
+                </div>
+                <div class="feedback" id="feedback-m3-q5"></div>
+            </div>
+
+            <!-- Résultat Mission 3 -->
+            <div class="mission-result" id="result-m3">
+                <div class="result-icon">🎉</div>
+                <h2>Mission 3 Terminée !</h2>
+                <p class="result-score">Tu as obtenu <span id="final-score-m3">0</span>/25 points</p>
+                <p class="result-message" id="message-m3"></p>
+                <button onclick="backToMenu()" class="btn-primary">Continuer vers la Mission 4</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran Mission 4 : Les types de rémunération -->
+    <div id="mission-4" class="screen mission-screen">
+        <div class="mission-header">
+            <button onclick="backToMenu()" class="btn-back">← Retour</button>
+            <h2>MISSION 4 : Les types de rémunération</h2>
+            <div class="mission-progress">Score: <span id="score-m4">0</span>/25</div>
+        </div>
+
+        <div class="mission-content-area">
+            <!-- Question 1 -->
+            <div class="question-card active" id="m4-q1">
+                <div class="question-illustration">
+                    <div class="mason-icon">👷🧱</div>
+                </div>
+                <h3>Question 1/9</h3>
+                <p class="question-text">Vincent est maçon. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 1, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 1, 'b')">B) Des honoraires</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 1, 'c')">C) Un traitement</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q1"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card" id="m4-q2">
+                <div class="question-illustration">
+                    <div class="secretary-icon">👩‍💼💻</div>
+                </div>
+                <h3>Question 2/9</h3>
+                <p class="question-text">Martine est secrétaire. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 2, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 2, 'b')">B) Des appointements</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 2, 'c')">C) Une commission</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q2"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card" id="m4-q3">
+                <div class="question-illustration">
+                    <div class="sales-icon">👨‍💼📊</div>
+                </div>
+                <h3>Question 3/9</h3>
+                <p class="question-text">Pierre est représentant de commerce. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 3, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 3, 'b')">B) Une commission</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 3, 'c')">C) Des gages</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q3"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card" id="m4-q4">
+                <div class="question-illustration">
+                    <div class="military-icon">🪖</div>
+                </div>
+                <h3>Question 4/9</h3>
+                <p class="question-text">François est militaire de carrière. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 4, 'a')">A) Une solde</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 4, 'b')">B) Un traitement</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 4, 'c')">C) Un salaire</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q4"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card" id="m4-q5">
+                <div class="question-illustration">
+                    <div class="civil-icon">🏛️👨‍💼</div>
+                </div>
+                <h3>Question 5/9</h3>
+                <p class="question-text">Nicole est fonctionnaire. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 5, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 5, 'b')">B) Un traitement</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 5, 'c')">C) Des appointements</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q5"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-card" id="m4-q6">
+                <div class="question-illustration">
+                    <div class="waiter-icon">☕👨‍🍳</div>
+                </div>
+                <h3>Question 6/9</h3>
+                <p class="question-text">Guy est garçon de café. En plus de son salaire, il reçoit des :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 6, 'a')">A) Honoraires</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 6, 'b')">B) Pourboires</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 6, 'c')">C) Dividendes</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q6"></div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-card" id="m4-q7">
+                <div class="question-illustration">
+                    <div class="maid-icon">🧹👩</div>
+                </div>
+                <h3>Question 7/9</h3>
+                <p class="question-text">Denise est femme de ménage. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 7, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 7, 'b')">B) Des appointements</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 7, 'c')">C) Des gages</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q7"></div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-card" id="m4-q8">
+                <div class="question-illustration">
+                    <div class="singer-icon">🎤🎵</div>
+                </div>
+                <h3>Question 8/9</h3>
+                <p class="question-text">Louis est chanteur. Pour un tour de chant, il réclame :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 8, 'a')">A) Un cachet</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 8, 'b')">B) Des honoraires</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 8, 'c')">C) Une commission</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q8"></div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-card" id="m4-q9">
+                <div class="question-illustration">
+                    <div class="doctor-icon">👨‍⚕️💊</div>
+                </div>
+                <h3>Question 9/9</h3>
+                <p class="question-text">Carole est médecin. Son revenu s'appelle :</p>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(4, 9, 'a')">A) Un salaire</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 9, 'b')">B) Un traitement</button>
+                    <button class="option-btn" onclick="checkAnswer(4, 9, 'c')">C) Des honoraires</button>
+                </div>
+                <div class="feedback" id="feedback-m4-q9"></div>
+            </div>
+
+            <!-- Résultat Mission 4 -->
+            <div class="mission-result" id="result-m4">
+                <div class="result-icon">🎉</div>
+                <h2>Mission 4 Terminée !</h2>
+                <p class="result-score">Tu as obtenu <span id="final-score-m4">0</span>/25 points</p>
+                <p class="result-message" id="message-m4"></p>
+                <button onclick="backToMenu()" class="btn-primary">Voir mes Résultats Finaux</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran des résultats finaux -->
+    <div id="results-screen" class="screen">
+        <div class="results-container">
+            <h1>🎓 RÉSULTATS FINAUX</h1>
+            <div class="student-name-display">
+                <span id="final-student-name"></span>
+            </div>
+
+            <div class="total-score-display">
+                <div class="score-circle">
+                    <span id="percentage-score">0</span>%
+                </div>
+                <p class="score-detail"><span id="points-score">0</span>/100 points</p>
+            </div>
+
+            <div class="performance-message" id="performance-message"></div>
+
+            <div class="missions-breakdown">
+                <h3>Détail par mission :</h3>
+                <div class="mission-score-item">
+                    <span>Mission 1 - La notion de ménage</span>
+                    <span class="score" id="breakdown-m1">0/25</span>
+                </div>
+                <div class="mission-score-item">
+                    <span>Mission 2 - Les origines des revenus</span>
+                    <span class="score" id="breakdown-m2">0/25</span>
+                </div>
+                <div class="mission-score-item">
+                    <span>Mission 3 - Les catégories de travailleurs</span>
+                    <span class="score" id="breakdown-m3">0/25</span>
+                </div>
+                <div class="mission-score-item">
+                    <span>Mission 4 - Les types de rémunération</span>
+                    <span class="score" id="breakdown-m4">0/25</span>
+                </div>
+            </div>
+
+            <div class="certificate-section" id="certificate-section" style="display: none;">
+                <div class="certificate">
+                    <h2>🏆 CERTIFICAT DE RÉUSSITE 🏆</h2>
+                    <p>Décerné à</p>
+                    <h3 id="cert-student-name"></h3>
+                    <p>Pour avoir complété avec succès</p>
+                    <p class="cert-course">Mission Revenus - Le Parcours Professionnel</p>
+                    <p class="cert-score">Score obtenu : <span id="cert-score"></span>/100</p>
+                    <p class="cert-date" id="cert-date"></p>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button onclick="sendResults()" class="btn-primary" id="send-btn">
+                    📧 Envoyer mes résultats au professeur
+                </button>
+                <button onclick="location.reload()" class="btn-secondary">
+                    🔄 Recommencer le jeu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
