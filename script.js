@@ -114,6 +114,50 @@ function login() {
 }
 
 // =================================
+// GESTION DU MESSAGE D'INTRODUCTION
+// =================================
+function hideIntroNotice() {
+    const introNotice = document.getElementById('intro-notice');
+    const creditsLink = document.getElementById('credits-link-container');
+
+    if (introNotice) {
+        introNotice.style.display = 'none';
+        localStorage.setItem('introNoticeSeen', 'true');
+    }
+
+    if (creditsLink) {
+        creditsLink.style.display = 'block';
+    }
+}
+
+function showIntroNotice() {
+    const introNotice = document.getElementById('intro-notice');
+    const creditsLink = document.getElementById('credits-link-container');
+
+    if (introNotice) {
+        introNotice.style.display = 'block';
+    }
+
+    if (creditsLink) {
+        creditsLink.style.display = 'none';
+    }
+}
+
+function checkIntroNotice() {
+    const seen = localStorage.getItem('introNoticeSeen');
+    const introNotice = document.getElementById('intro-notice');
+    const creditsLink = document.getElementById('credits-link-container');
+
+    if (seen === 'true') {
+        if (introNotice) introNotice.style.display = 'none';
+        if (creditsLink) creditsLink.style.display = 'block';
+    } else {
+        if (introNotice) introNotice.style.display = 'block';
+        if (creditsLink) creditsLink.style.display = 'none';
+    }
+}
+
+// =================================
 // GESTION DES ÉCRANS
 // =================================
 function showScreen(screenId) {
@@ -509,7 +553,15 @@ function showResults() {
 }
 
 // =================================
-// ENVOI DES RÉSULTATS
+// IMPRESSION DES RÉSULTATS
+// =================================
+function printResults() {
+    // Lancer directement l'impression de la page
+    window.print();
+}
+
+// =================================
+// ENVOI DES RÉSULTATS (DÉSACTIVÉ)
 // =================================
 function sendResults() {
     // Sécurité: toujours recompute avant envoi
@@ -625,4 +677,7 @@ document.addEventListener('keydown', function(e) {
 window.addEventListener('load', function() {
     console.log('🎮 Jeu Mission Revenus chargé avec succès !');
     console.log('📚 Cours: Limites de la Consommation - Revenus du Travail');
+
+    // Vérifier si le message d'introduction a déjà été vu
+    checkIntroNotice();
 });
