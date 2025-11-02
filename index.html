@@ -15,7 +15,18 @@
                 <h1>MISSION REVENUS</h1>
                 <p class="subtitle">Le Parcours Professionnel</p>
             </div>
-            
+
+            <!-- Message d'introduction -->
+            <div class="intro-notice" id="intro-notice">
+                <p class="intro-text">« Ce jeu a été conçu pour les élèves de l'Institut Saint-Luc de Frameries par M. Depret. »</p>
+                <button class="intro-close" id="intro-close" onclick="hideIntroNotice()">✕</button>
+            </div>
+
+            <!-- Lien pour afficher les crédits -->
+            <div class="credits-link-container" id="credits-link-container" style="display: none;">
+                <a href="#" class="credits-link" onclick="showIntroNotice(); return false;">📜 Afficher les crédits</a>
+            </div>
+
             <div class="login-form">
                 <h2>Connexion Élève</h2>
                 <input type="email" id="student-email" placeholder="prenom.nom@istlm.org" required>
@@ -686,8 +697,8 @@
             </div>
 
             <div class="results-actions">
-                <button onclick="sendResults()" class="btn-primary" id="send-btn">
-                    📧 Envoyer mes résultats au professeur
+                <button onclick="printResults()" class="btn-primary" id="print-btn">
+                    🖨️ Imprimer mes résultats
                 </button>
                 <button onclick="location.reload()" class="btn-secondary">
                     🔄 Recommencer le jeu
